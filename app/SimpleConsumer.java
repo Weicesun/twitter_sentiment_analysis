@@ -2,7 +2,7 @@ import java.util.*;
 import org.apache.kafka.clients.consumer.*;
 
 public class SimpleConsumer {
-	public void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception{
 		if (args.length == 0) {
 			return;
 		}
@@ -15,9 +15,9 @@ public class SimpleConsumer {
 		props.put("auto.commit.interval.ms", "1000");
 		props.put("session.timeout.ms", "30000");
 		props.put("key.deserializer", 
-         "org.apache.kafka.common.serializa-tion.StringDeserializer");
+         "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", 
-         "org.apache.kafka.common.serializa-tion.StringDeserializer");
+         "org.apache.kafka.common.serialization.StringDeserializer");
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 		consumer.subscribe(Arrays.asList(topicName));
 		System.out.println("Subscribed to topic " + topicName);
@@ -25,7 +25,7 @@ public class SimpleConsumer {
 
       	while (true) {
       		ConsumerRecords<String, String> records = consumer.poll(100);
-      		for (ConsumerRecords<String, String> record : records) {
+      		for (ConsumerRecord<String, String> record : records) {
       			System.out.printf("offset: %d key: %s value: %s \n ",
       				record.offset(), record.key(), record.value());
       		}

@@ -2,7 +2,7 @@ import java.util.*;
 import org.apache.kafka.clients.producer.*;
 
 public class SimpleProducer {
-    public static void main(String[] args) throws Exception{
+   /* public static void main(String[] args) throws Exception{
         if (args.length == 0) {
         	System.out.println("type in parameters");
         	return;
@@ -29,5 +29,5 @@ public class SimpleProducer {
         System.out.println("Message send successfully");
         producer.close();
         
-    }
+    }*/
 }
