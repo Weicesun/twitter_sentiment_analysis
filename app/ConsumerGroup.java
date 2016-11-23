@@ -12,7 +12,7 @@ public class ConsumerGroup {
 		}
 		String topic = args[0].toString();
 		String group = args[1].toString();
-		Properties prop = new Properties();
+		Properties props = new Properties();
 
 		props.put("bootstrap.servers", "localhost:9092");
 		props.put("group.id", group);
