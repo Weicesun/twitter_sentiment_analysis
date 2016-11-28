@@ -1,18 +1,20 @@
 package twitter_sentiment_analysis;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import twitter4j.*;
 import twitter4j.conf.*;
 
 import org.apache.kafka.clients.producer.*;
 
 public class KafkaTwitterProducer {
-	public void main(String[] args) thows Exception{
+	public static void main(String[] args) throws Exception{
 		LinkedBlockingQueue<Status> queue = new LinkedBlockingQueue<Status>(1000);
 		if (args.length < 5) {
-			System.out,println("KafkaTwitterProducer <twitter-consumer-key>
-            <twitter-consumer-secret> <twitter-access-token>
-            <twitter-access-token-secret>
-            <topic-name> <twitter-search-keywords>");
+			System.out.println("KafkaTwitterProducer  <twitter-consumer-key> <twitter-consumer-secret>"
+					+ " <twitter-access-token>"
+					+ "<twitter-access-token-secret>"
+					+ "<topic-name> <twitter-search-keywords>");
             return;
 		}
 		String consumerKey = args[0];
@@ -20,21 +22,22 @@ public class KafkaTwitterProducer {
 		String accessToken = args[2];
 		String accessTokenSecret = args[3];
 		String topicName = args[4];
-		String[] keyWords = Arrays.copyOfRange(arguments, 5, arguments.length);
-		String[] arguments = args.clone();
+		//String[] arguments = args.clone();
+		//String[] keyWords = Arrays.copyOfRange(arguments, 5, arguments.length);
+		
 
-		ConfigureationBuilder cb = new ConfigureationBuilder();
-		cb.setDebugEnable(true)
+		ConfigurationBuilder cb = new ConfigurationBuilder();
+		cb.setDebugEnabled(true)
 		.setOAuthConsumerKey(consumerKey)
 		.setOAuthConsumerSecret(consumerSecret)
 		.setOAuthAccessToken(accessToken)
 		.setOAuthAccessTokenSecret(accessTokenSecret);
-		TwitterStream twitterStream = new twitterStreamFactory(cb.build()).getInstance();
+		TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 		StatusListener listener = new StatusListener() {
-			public onStatus(Status status) {
+			public void onStatus(Status status) {
 				queue.offer(status);
 			}
-			public void onDeletionNotice(StatusDeletionNotice statusDeletion-Notice) {
+			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
             
          	}
          	public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
@@ -65,7 +68,7 @@ public class KafkaTwitterProducer {
       	props.put("value.serializer", 
          "org.apache.kafka.common.serialization.StringSerializer");
 
-      	Producer<String, String> produce = new KafkaProducer<String, String>(props);
+      	Producer<String, String> producer = new KafkaProducer<String, String>(props);
       	int i = 0;
       	int j = 0;
       	while (i < 10) {
@@ -85,6 +88,7 @@ public class KafkaTwitterProducer {
       	producer.close();
       	Thread.sleep(5000);
       	twitterStream.shutdown();
-
 	}
+
 }
+
