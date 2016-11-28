@@ -135,10 +135,7 @@ public class KafkaTwitterProducer {
 		String accessToken = args[2];
 		String accessTokenSecret = args[3];
 		String topicName = args[4];
-		//String[] arguments = args.clone();
-		//String[] keyWords = Arrays.copyOfRange(arguments, 5, arguments.length);
 		
-
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true)
 		.setOAuthConsumerKey(consumerKey)
@@ -185,9 +182,11 @@ public class KafkaTwitterProducer {
       	int i = 0;
       	int j = 0;
       	while (i < 10) {
+      		
       		Status ret = queue.poll();
       		if (ret == null) {
-      			Thread.sleep(100);
+      			System.out.println("debug");
+      			Thread.sleep(1000);
       			i++;
       		} else {
       			for (HashtagEntity hashtag : ret.getHashtagEntities()) {
