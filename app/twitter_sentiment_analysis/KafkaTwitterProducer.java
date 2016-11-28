@@ -13,10 +13,10 @@ public class KafkaTwitterProducer {
       
       if(args.length < 5){
          System.out.println(
-            "Usage: KafkaTwitterProducer <twitter-consumer-key>
-            <twitter-consumer-secret> <twitter-access-token>
-            <twitter-access-token-secret>
-            <topic-name> <twitter-search-keywords>");
+            "Usage: KafkaTwitterProducer <twitter-consumer-key>");
+            //<twitter-consumer-secret> <twitter-access-token>
+            //<twitter-access-token-secret>
+            //<topic-name> <twitter-search-keywords>");
          return;
       }
       
@@ -57,7 +57,7 @@ public class KafkaTwitterProducer {
          @Override
          public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
             // System.out.println("Got a status deletion notice id:" 
-               + statusDeletionNotice.getStatusId());
+               //+ statusDeletionNotice.getStatusId());
          }
          
          @Override
@@ -115,7 +115,7 @@ public class KafkaTwitterProducer {
             for(HashtagEntity hashtage : ret.getHashtagEntities()) {
                System.out.println("Hashtag: " + hashtage.getText());
                producer.send(new ProducerRecord<String, String>(
-                  top-icName, Integer.toString(j++), hashtage.getText()));
+                  topicName, Integer.toString(j++), hashtage.getText()));
             }
          }
       }
