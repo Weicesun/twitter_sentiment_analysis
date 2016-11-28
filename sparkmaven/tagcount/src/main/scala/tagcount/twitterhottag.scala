@@ -21,7 +21,7 @@ object twitterhottag {
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap 
     val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
     val words = lines.flatMap(_.split(" "))
-    val topCounts60 = words.map((, 1)).reduceByKeyAndWindow(_+_, Seconds(60))
+    val topCounts60 = words.map((_, 1)).reduceByKeyAndWindow(_+_, Seconds(60))
     .map{case(topic, count) => (count, topic)}
     .transform(_.sortByKey(false))
     topCounts60.foreachRDD(rdd => {

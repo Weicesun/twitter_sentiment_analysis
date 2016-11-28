@@ -105,12 +105,20 @@ public class KafkaTwitterProducer {
       int i = 0;
       int j = 0;
       
-      while(i < 10) {
+     // while(i < 10) {
+      while (true) {
+    	  twitterStream.addListener(listener);
+          twitterStream.filter(query);
+
+          Thread.sleep(5000);
          Status ret = queue.poll();
          
          if (ret == null) {
             Thread.sleep(100);
             i++;
+            if (i == 10) {
+            	break;
+            }
          }else {
             for(HashtagEntity hashtage : ret.getHashtagEntities()) {
                System.out.println("Hashtag: " + hashtage.getText());
