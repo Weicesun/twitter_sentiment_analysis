@@ -10,11 +10,11 @@ import org.apache.kafka.clients.producer.*;
 public class KafkaTwitterProducer {
 	public static void main(String[] args) throws Exception{
 		LinkedBlockingQueue<Status> queue = new LinkedBlockingQueue<Status>(1000);
-		if (args.length < 5) {
+		if (args.length != 5) {
 			System.out.println("KafkaTwitterProducer  <twitter-consumer-key> <twitter-consumer-secret>"
 					+ " <twitter-access-token>"
 					+ "<twitter-access-token-secret>"
-					+ "<topic-name> <twitter-search-keywords>");
+					+ "<topic-name>");
             return;
 		}
 		String consumerKey = args[0];
