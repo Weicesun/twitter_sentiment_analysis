@@ -18,24 +18,22 @@ object twitterhottag {
     val ssc = new StreamingContext(sparkConf, Seconds(2))
     
     ssc.checkpoint("checkpoint")
-    println("why again so many problem")
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap 
     val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
     val words = lines.flatMap(_.split(" "))
-    val wordCounts = words.map(x => (x, 1L)).reduceByKeyAndWindow(_ + _, _ - _, Minutes(10), Seconds(2), 2)
-    wordCounts.print()
+    val topCounts60 = words.map((, 1)).reduceByKeyAndWindow(_+_, Seconds(60))
+    .map{case(topic, count) => (count, topic)}
+    .transform(_.sortByKey(false))
+    topCounts60.foreachRDD(rdd => {
+        val topList = rdd.take(10)
+        println("\n Popular tag in 60 seconds (%s total)".format(rdd.count()))
+        topList.foreach{case (count, tag) => println("%s(%s tweets)".format(tag, count))}
+        })
+    //val wordCounts = words.map(x => (x, 1L)).reduceByKeyAndWindow(_ + _, _ - _, Minutes(10), Seconds(2), 2)
+    //wordCounts.print()
     ssc.start()
     ssc.awaitTermination()
-    /*
-    val sc = new SparkContext("local", "word", "usr/local/spark",
-        Nil, Map(), Map());
-    val input = sc.textFile("input.txt");
-    val count = input.flatMap(line => line.split(" "))
-    .map(word=>(word, 1))
-    .reduceByKey(_+_)
     
-    count.saveAsTextFile("output")
-    System.out.println("ok")*/
   }
   
 }
